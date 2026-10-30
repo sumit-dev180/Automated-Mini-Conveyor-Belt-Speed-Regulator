@@ -1,0 +1,32 @@
+#include <Servo.h>
+
+Servo conveyorMotor;
+
+#define SENSOR_PIN A0
+#define MOTOR_PIN 9
+
+void setup() {
+  conveyorMotor.attach(MOTOR_PIN);
+  pinMode(SENSOR_PIN, INPUT);
+  Serial.begin(115200);
+  Serial.println("Automated Mini Conveyor Belt Speed Regulator Started.");
+}
+
+void loop() {
+  // Read optical proximity sensor feedback
+  int sensorValue = analogRead(SENSOR_PIN);
+  
+  // Map sensor reading to motor angle/speed position
+  int motorPos = map(sensorValue, 0, 1023, 0, 180);
+  
+  // Set motor speed/position
+  conveyorMotor.write(motorPos);
+  
+  // Print status to Serial Monitor
+  Serial.print("Sensor Feedback: ");
+  Serial.print(sensorValue);
+  Serial.print(" | Regulated Motor Position/Speed: ");
+  Serial.println(motorPos);
+  
+  delay(100);
+}
